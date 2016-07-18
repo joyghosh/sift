@@ -20,5 +20,11 @@ public class App
 //        classifier.train("make quick money in the online casino","bad");
         System.out.println(classifier.featureCount("jumps", "bad"));
         System.out.println(classifier.featureCount("jumps", "good"));
+        System.out.println(classifier.featureProbability("fox", "good"));
+        System.out.println(classifier.weightedProbability("money", "good",1.0, 0.5));
+        Util.sampleTrain(classifier);
+        System.out.println(classifier.weightedProbability("money", "good",1.0, 0.5));
+        Util.sampleTrain(classifier);
+        System.out.println(classifier.weightedProbability("money", "good",1.0, 0.5));
     }
 }

@@ -135,15 +135,22 @@ public class BaseClassifier implements Classifier {
 
 	@Override
 	public double featureProbability(String feature, String category) {
-		
-		return 0;
+		if(categoryCount(category) != 0.0){
+			return (featureCount(feature, category)/categoryCount(category));
+		}
+		return 0.0;
 	}
 
 	@Override
-	public double weightedProbability(String feature, String category,
-			String prf, double weight, double ap) {
-	
-		return 0;
+	public double weightedProbability(String feature, String category, 
+			double weight, double ap) {
+		
+		double basic_probability = featureProbability(feature, category);
+		double total = 0.0;
+		for(String c:categories()){
+			total += featureCount(feature, c);
+		}
+		return (((weight*ap)+(total*basic_probability))/(weight+total));
 	}
 
 }

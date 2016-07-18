@@ -1,6 +1,8 @@
 package com.sift.classifiers;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A naive document classifier based on Bayes theorem.
@@ -12,14 +14,17 @@ import java.io.File;
  * 
  */
 public class NaiveBayes extends BaseClassifier {
-
+	
+	private Map<String, Double> thresholds;
 	
 	public NaiveBayes(String type) {
 		super(type);
+		this.thresholds = new HashMap<String, Double>();
 	}
 	
 	public NaiveBayes(String type, File document) {
 		super(type, document);
+		this.thresholds = new HashMap<String, Double>();
 	}
 	
 }

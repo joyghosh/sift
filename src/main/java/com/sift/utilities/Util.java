@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+import com.sift.classifiers.Classifier;
+
 /**
  * 
  * <p> A utility container holding all the essential
@@ -25,7 +27,7 @@ public class Util {
 		
 		Object[] features = null;
 		switch (type) {
-			case Feature.WORDS:	features = getWords((File)obj);
+			case Feature.WORDS:	features = (obj instanceof File)? getWords((File)obj) : getWords((String)obj);
 								break;
 			default:	System.err.println("No such feature type supported.");	
 						break;
@@ -52,5 +54,35 @@ public class Util {
 		}
 		
 		return words;
+	}
+	
+	private static String[] getWords(String sentence){
+		
+		Scanner in = null;
+		String[] words = null;
+		try{
+			in = new Scanner(sentence);
+			StringBuilder sb = new StringBuilder();
+			while(in.hasNext()){
+				sb.append(","+in.next());
+			}
+			words =  sb.toString().split(",");
+		}finally{
+			in.close();
+		}
+		
+		return words;
+	}
+	
+	/**
+	 * Train the classifier with sample data.
+	 * @param classifier
+	 */
+	public static void sampleTrain(Classifier classifier){
+		classifier.train("Nobody owns the water.", "good");
+		classifier.train("the quick rabbit jumps fences", "good");
+		classifier.train("buy pharmaceuticals now", "bad");
+		classifier.train("make quick money at the online casino", "bad");
+		classifier.train("the quick brown fox jumps", "good");
 	}
 }

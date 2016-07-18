@@ -1,6 +1,6 @@
 package com.sift.classifiers;
 
-import java.io.File;
+import java.util.Set;
 
 /**
  * Interface for document classifier.
@@ -13,10 +13,10 @@ public interface Classifier {
 	public void incrementFeature(String feature, String category);
 	public void incrementCategory(String category);
 	public double featureCount(String feature, String category);
-	public int categoryCount(String category);
+	public double categoryCount(String category);
 	public int totalCount();
-	public String[] categories();
-	public void train(File item, String category);
+	public Set<String> categories();
+	public void train(Object item, String category);
 	public double featureProbability(String feature, String category);
 	public double weightedProbability(String feature, String category, String prf,
 										double weight, double ap);

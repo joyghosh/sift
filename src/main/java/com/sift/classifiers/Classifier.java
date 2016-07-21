@@ -20,4 +20,6 @@ public interface Classifier {
 	public double featureProbability(String feature, String category);
 	public double weightedProbability(String feature, String category,
 										double weight, double ap);
+	public String classify(Object item, String _default);
+	public void reset();
 }

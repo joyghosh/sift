@@ -1,6 +1,5 @@
 package com.sift.classifiers;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,15 +18,15 @@ public class NaiveBayes extends BaseClassifier {
 	
 	private Map<String, Double> thresholds;
 	
-	public NaiveBayes(String type) {
-		super(type);
+	protected NaiveBayes(String type, boolean persist) {
+		super(type, persist);
 		this.thresholds = new HashMap<String, Double>();
 	}
 	
-	public NaiveBayes(String type, File document) {
-		super(type, document);
-		this.thresholds = new HashMap<String, Double>();
-	}
+//	private NaiveBayes(String type, File document, boolean persist) {
+//		super(type, document, persist);
+//		this.thresholds = new HashMap<String, Double>();
+//	}
 	
 	/**
 	 * Document probability.

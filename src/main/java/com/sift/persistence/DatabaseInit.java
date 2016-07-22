@@ -21,6 +21,9 @@ public class DatabaseInit {
 	private static DatabaseInit instance;
 	private static Connection connection;
 	
+	/**
+	 * Singelton pattern.
+	 */
 	private DatabaseInit(){
 		if(connection == null){
 			synchronized (DatabaseInit.class) {
@@ -29,6 +32,10 @@ public class DatabaseInit {
 		}
 	}
 	
+	/**
+	 * Returns an initializer instance.
+	 * @return
+	 */
 	public static DatabaseInit getInitializer(){
 		if(instance == null){
 			synchronized (DatabaseInit.class) {
@@ -38,6 +45,10 @@ public class DatabaseInit {
 		return instance;
 	}
 	
+	/**
+	 * Returns a connection instance.
+	 * @return
+	 */
 	public Connection getConnection(){
 		return connection;
 	}
@@ -48,8 +59,9 @@ public class DatabaseInit {
 	private static void init(){
 		//logger.debug("initializing database.");
 		try {
-			Class.forName(DatabaseConstants.CLASS_NAME);
-			connection = DriverManager.getConnection(DatabaseConstants.DB_CONNECTION_STRING);
+			Class.forName(DatabaseConstants.H2_CLASS_NAME);
+			connection = DriverManager.getConnection(DatabaseConstants.DB_CONNECTION_STRING,
+					DatabaseConstants.DB_USER,DatabaseConstants.DB_PASSWORD);
 			createTables(connection);
 		} catch (ClassNotFoundException | SQLException e) {
 			logger.error(e.getMessage());
@@ -65,9 +77,9 @@ public class DatabaseInit {
 		//logger.debug("initializing tables.");
 		Statement statement = conn.createStatement();
 		String feature_count_table = "CREATE TABLE IF NOT EXISTS "
-										+DatabaseConstants.FEATURE_COUNT_TABLE+"(feature,category,count)";
+										+DatabaseConstants.FEATURE_COUNT_TABLE+"(feature VARCHAR(255),category VARCHAR(255),count DOUBLE)";
 		String category_count_table = "CREATE TABLE IF NOT EXISTS "+DatabaseConstants.CATEGORY_COUNT_TABLE
-										+"(category,count)";
+										+"(category VARCHAR(255),count INT)";
 		conn.setAutoCommit(false);
 		statement.addBatch(feature_count_table);
 		statement.addBatch(category_count_table);

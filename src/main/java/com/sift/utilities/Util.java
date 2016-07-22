@@ -2,14 +2,22 @@ package com.sift.utilities;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sift.classifiers.Classifier;
+import com.sift.classifiers.ClassifierFactory;
 
 /**
  * 
@@ -23,6 +31,7 @@ import com.sift.classifiers.Classifier;
 public class Util {
 	
 	private static final Logger logger = LoggerFactory.getLogger(Util.class);
+	private static final int POOL_SIZE = 10;
 	
 	/**
 	 * utility method which returns the feature set as an array.
@@ -42,18 +51,27 @@ public class Util {
 		return features;
 	}
 	
+	/**
+	 * Extract all words from a file.
+	 * @param document
+	 * @return
+	 */
 	private static String[] getWords(File document){
 		
 		Scanner in = null;
 		String[] words = null;
-		Pattern p = Pattern.compile("[\\w']+");
+		Pattern del = Pattern.compile("\\s+");
+		Pattern wp = Pattern.compile("[\\w']+");
 		
 		try {
 			in = new Scanner(document);
-			in.useDelimiter(p);
+			in.useDelimiter(del);
 			StringBuilder sb = new StringBuilder();
+			Matcher matcher;
 			while(in.hasNext()){
-				sb.append(","+in.next());
+				matcher = wp.matcher(in.nextLine());
+				while(matcher.find())
+					sb.append(","+matcher.group());
 			}
 			words =  sb.toString().split(",");
 		} catch (FileNotFoundException e) {
@@ -65,12 +83,17 @@ public class Util {
 		return words;
 	}
 	
-	private static String[] getWords(String sentence){
+	/**
+	 * Extract all the words from text.
+	 * @param sentence
+	 * @return
+	 */
+	private static String[] getWords(String text){
 		
 		Scanner in = null;
 		String[] words = null;
 		try{
-			in = new Scanner(sentence);
+			in = new Scanner(text);
 			StringBuilder sb = new StringBuilder();
 			while(in.hasNext()){
 				sb.append(","+in.next());
@@ -100,9 +123,10 @@ public class Util {
 	 * Train the classifier with some serious training stuff.
 	 * @param classifier
 	 * @param seeds
+	 * @deprecated
 	 */
 	public static void train(Classifier classifier, List<Seed> seeds){
-		logger.debug("training classifier with some serious stuff.");
+		logger.debug("training classifier with provided seeds.");
 		for(Seed s:seeds){
 			if(s.isText()){
 				classifier.train(s.getText(), s.getCategory());
@@ -110,5 +134,65 @@ public class Util {
 				classifier.train(s.getFile(), s.getCategory());
 			}
 		}
+	}
+	
+	/**
+	 * Return seed objects for initializing and training the classifier. 
+	 * @param path directory path for files.
+	 * @return seeds
+	 */
+	public static List<Seed> getSeeds(String path, String category){
+		
+		logger.debug("Searching directory for seed files in "+category+" category.");
+		File folder = new File(path);
+		List<Seed> seeds = new ArrayList<Seed>();
+		if(folder.isDirectory()){
+			
+			File[] files = folder.listFiles();
+			for(File f: files){
+				seeds.add(new Seed(f, category));
+			}
+		}else{
+			logger.error("no such directory found "+path);
+			System.exit(1);
+		}
+			return seeds;
+	}
+	
+	/**
+	 * Bulk parallel training for classifier.
+	 * @param seeds
+	 * @param classifierType
+	 */
+	public static void batchTrain(List<Seed> seeds, String classifierType){
+		
+		logger.debug("starting bulk training for classifier.");
+		ExecutorService executor = Executors.newFixedThreadPool(POOL_SIZE);
+		List<Classifier> classifiers = new ArrayList<Classifier>();
+		ClassifierFactory factory = new ClassifierFactory();
+		List<Future<Boolean>> futures = new ArrayList<Future<Boolean>>();
+		
+		//classifier sets half the size of thread pool.
+		for(int i=0;i<POOL_SIZE/2;i++){
+			classifiers.add(factory.getClassifier(classifierType)); 
+		}
+		
+		//start workers using round robin fashioned classifier selection.
+		for(int i=0;i<seeds.size();i++){
+			Callable<Boolean> task = new TrainingTask(classifiers.get(i%classifiers.size()), seeds.get(i));
+			futures.add(executor.submit(task));
+		}
+		
+		//Wait for the tasks to finish.
+		for(Future<Boolean> f:futures){
+			try{
+				f.get();
+			}catch(InterruptedException | ExecutionException e){
+				logger.error(e.getMessage());
+			}
+		}
+		
+		executor.shutdown();
+		logger.debug("training process complete.");
 	}
 }

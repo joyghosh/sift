@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * File reader utility class.
- * 
+ * Used to initialize and train the classifier.
  * @author Joy Ghosh
  * @version 1.0
  * @since 1.0
@@ -18,6 +18,11 @@ public class FileReader {
 
 	private static final Logger logger = LoggerFactory.getLogger(FileReader.class);
 	
+	/**
+	 * Re
+	 * @param path
+	 * @return
+	 */
 	public static List<Seed> spams(String path){
 		logger.debug("finding spam files.");
 		File folder = new File(path);

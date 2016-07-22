@@ -18,6 +18,7 @@
 	<jcl-over-slf4j.version>1.7.5</jcl-over-slf4j.version>
 	<sqlite-jdbc.version>3.8.11.2</sqlite-jdbc.version>
 	<jackson.version>2.7.5</jackson.version>
+	<h2.version>1.4.192</h2.version>
   </properties>
 
   <dependencies>
@@ -47,6 +48,14 @@
 	    <artifactId>sqlite-jdbc</artifactId>
 	    <version>${sqlite-jdbc.version}</version>
 	</dependency>
+	
+	<!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
+	<dependency>
+	    <groupId>com.h2database</groupId>
+	    <artifactId>h2</artifactId>
+	    <version>${h2.version}</version>
+	</dependency>
+	
 	
 	<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
 	<dependency>

@@ -107,15 +107,15 @@ public class BaseClassifier implements Classifier {
 
 	@Override
 	public void train(Object item, String category) {
-		String[] features = (String[]) Util.getFeatures(item, type);
-		
-		for(String feature: features){
-			//Increment the count for every feature with this category
-			incrementFeature(feature, category);
-		}
-		
-		//Increment the count for this category
-		incrementCategory(category);
+		synchronized (this) {
+			String[] features = (String[]) Util.getFeatures(item, type);
+			for(String feature: features){
+				//Increment the count for every feature with this category
+				incrementFeature(feature, category);
+			}
+			//Increment the count for this category
+			incrementCategory(category);
+		}	
 	}
 
 	@Override

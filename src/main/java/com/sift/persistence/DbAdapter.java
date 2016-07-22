@@ -41,7 +41,7 @@ public class DbAdapter {
 		return instance;
 	} 
 	
-	public double featureCount(String feature, String category){
+	public synchronized double featureCount(String feature, String category){
 		
 		//logger.debug("fetching feature count.");
 		double fc = 0.0; 
@@ -61,7 +61,7 @@ public class DbAdapter {
 		return fc;
 	}
 	
-	public void incrFeature(String feature, String category){
+	public synchronized void incrFeature(String feature, String category){
 		
 //		System.out.println("incrementing feature count.");
 		double count = featureCount(feature, category); 
@@ -89,7 +89,7 @@ public class DbAdapter {
 		}
 	}
 	
-	public void incrCategory(String category){
+	public synchronized void incrCategory(String category){
 		int count = categoryCount(category);
 		try{
 			if(count == 0){
@@ -113,7 +113,7 @@ public class DbAdapter {
 		}
 	}
 	
-	public int categoryCount(String category){
+	public synchronized int categoryCount(String category){
 		int count = 0;
 		try {
 			PreparedStatement stmt = conn.prepareStatement("SELECT count FROM "+
@@ -130,7 +130,7 @@ public class DbAdapter {
 		return count;
 	}
 	
-	public int totalCount(){
+	public synchronized int totalCount(){
 		int count = 0;
 		try {
 			Statement stmt = conn.createStatement();
@@ -144,7 +144,7 @@ public class DbAdapter {
 		return count;
 	}
 	
-	public Set<String> categories(){
+	public synchronized Set<String> categories(){
 		Set<String> categories = new HashSet<String>();
 		try {
 			Statement stmt = conn.createStatement();
@@ -158,7 +158,7 @@ public class DbAdapter {
 		return categories;
 	}
 	
-	public void reset(){
+	public synchronized void reset(){
 		DatabaseInit.dropTables(conn);
 	}
 }

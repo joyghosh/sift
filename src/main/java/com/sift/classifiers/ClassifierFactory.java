@@ -20,14 +20,12 @@ public class ClassifierFactory {
 		if(type == null) return null;	
 		Classifier cl = null;
 		switch(type){
-			case ClassifierConstants.BAYES:  logger.debug("returning bayes classifier.");
-										cl = new NaiveBayes(Feature.WORDS, 
-												ClassifierConstants.PERSISTENCE_ENABLED);
-										break;
+			case ClassifierConstants.BAYES:	cl = new NaiveBayes(Feature.WORDS, 
+											ClassifierConstants.PERSISTENCE_ENABLED);
+											break;
 										
-			case ClassifierConstants.FISHER: logger.debug("returning fisher classifier.");
-										break;
-			default: logger.warn("no suitable classfier found.");
+			case ClassifierConstants.FISHER: //fall through.
+			default: logger.warn("no such classfier found.");
 		}
 		
 		return cl;

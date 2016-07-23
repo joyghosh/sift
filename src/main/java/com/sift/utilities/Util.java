@@ -166,7 +166,9 @@ public class Util {
 	 */
 	public static void batchTrain(List<Seed> seeds, String classifierType){
 		
-		logger.debug("starting bulk training for classifier.");
+		logger.debug("Training classifier in batch mode .....");
+		
+		long start = System.currentTimeMillis();
 		ExecutorService executor = Executors.newFixedThreadPool(POOL_SIZE);
 		List<Classifier> classifiers = new ArrayList<Classifier>();
 		ClassifierFactory factory = new ClassifierFactory();
@@ -193,6 +195,16 @@ public class Util {
 		}
 		
 		executor.shutdown();
-		logger.debug("training process complete.");
+		long end = System.currentTimeMillis();
+		logger.debug("Classifier training complete.");
+		logger.debug("Time for training "+((end-start)/1000.0)+"(s) seconds");
+	}
+	
+	/**
+	 * Hard reset training data. Use wisely.
+	 * @param classifier
+	 */
+	public static void resetClassifier(Classifier classifier){
+		classifier.reset();
 	}
 }

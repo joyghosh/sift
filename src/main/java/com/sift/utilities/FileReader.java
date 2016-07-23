@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
  * @author Joy Ghosh
  * @version 1.0
  * @since 1.0
+ * @deprecated
  */
 public class FileReader {
 

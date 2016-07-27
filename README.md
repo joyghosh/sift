@@ -7,7 +7,7 @@ You just need to train it with seed texts of your category choices and it is sma
 
 * [Naive Bayes classifier](https://en.wikipedia.org/wiki/Naive_Bayes_classifier)
 
-### Usage
+### Installation
 
 Use it as a maven dependency.
 * Step 1. Add the JitPack repository to your build file 

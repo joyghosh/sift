@@ -27,6 +27,22 @@ Use it as a maven dependency.
 	    <version>v1.0-beta</version>
 	</dependency>
 ```
+### Usage
+```sh
+import com.sift.classifiers.Classifier;
+import com.sift.classifiers.ClassifierConstants;
+import com.sift.classifiers.ClassifierFactory;
+import com.sift.utilities.Util;
+
+ClassifierFactory factory = new ClassifierFactory();
+Classifier c = factory.getClassifier(ClassifierConstants.BAYES);
+
+//Just for demo, use Util.batchTrain(List<Seed> seeds, String classifierType) instead for
+//custom seed training.
+Util.sampleTrain(c);
+
+System.out.println(c.classify("make quick money at the online casino", "unknown"));
+```
 
 ###	Demo
 Please follow the link below to see a live demo of sift classifier which tags whether a content posted is a spam or not a spam on a best effort basis. It is a pre-compiled version of a trained classifier.

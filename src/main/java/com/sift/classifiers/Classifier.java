@@ -18,6 +18,8 @@ public interface Classifier {
 	public Set<String> categories();
 	public void train(Object item, String category);
 	public double featureProbability(String feature, String category);
-	public double weightedProbability(String feature, String category, String prf,
+	public double weightedProbability(String feature, String category,
 										double weight, double ap);
+	public String classify(Object item, String _default);
+	public void reset();
 }

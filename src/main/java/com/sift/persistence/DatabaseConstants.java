@@ -10,7 +10,6 @@ package com.sift.persistence;
 public interface DatabaseConstants {
 	public final String SQLITE_CLASS_NAME = "org.sqlite.JDBC";
 	public final String H2_CLASS_NAME = "org.h2.Driver"; 
-//	public String DB_CONNECTION_STRING = "jdbc:sqlite:sift.db";
 	public final String DB_CONNECTION_STRING = "jdbc:h2:./sift";
 	public final String DB_USER = "sa";
 	public final String DB_PASSWORD = "";

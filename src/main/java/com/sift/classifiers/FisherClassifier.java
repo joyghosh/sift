@@ -58,7 +58,7 @@ public class FisherClassifier extends BaseClassifier{
 	public double fisherProbability(Object item, String category){
 		//Multiply all probabilities together.
 		double p = 1.0;
-		String[] features = (String[]) Util.getFeatures(item, category);
+		String[] features = (String[]) Util.getFeatures(item, type);
 		for(String f:features){
 			p *= weightedProbability(f, category, DEFAULT_WEIGHT , DEFAULT_ASSUMED_PROBABILITY);
 		}

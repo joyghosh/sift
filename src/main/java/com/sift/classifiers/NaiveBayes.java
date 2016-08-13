@@ -38,7 +38,7 @@ public class NaiveBayes extends BaseClassifier {
 		String[] features = (String[]) Util.getFeatures(item, type);
 		double p = 1.0;
 		for(String feature:features){
-			p *= weightedProbability(feature, category, 1.0, 0.5);
+			p *= weightedProbability(feature, category, DEFAULT_WEIGHT, DEFAULT_ASSUMED_PROBABILITY);
 		}
 		return p;
 	}

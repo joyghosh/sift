@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import com.sift.utilities.Feature;
 
 /**
+ * Factory class for classifiers.
  * 
  * @author Joy Ghosh
  * @version 1.0
@@ -24,7 +25,10 @@ public class ClassifierFactory {
 											ClassifierConstants.PERSISTENCE_ENABLED);
 											break;
 										
-			case ClassifierConstants.FISHER: //fall through.
+			case ClassifierConstants.FISHER: cl = new FisherClassifier(Feature.WORDS, 
+											ClassifierConstants.PERSISTENCE_ENABLED);
+											break;
+											
 			default: logger.warn("no such classfier found.");
 		}
 		

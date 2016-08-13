@@ -25,6 +25,8 @@ public class BaseClassifier implements Classifier {
 	protected String type;
 //	private boolean persist;
 	private DbAdapter db;
+	protected static final double DEFAULT_WEIGHT = 1.0;
+	protected static final double DEFAULT_ASSUMED_PROBABILITY = 0.5;
 	
 	protected BaseClassifier(String type, boolean persist) {
 //		this.feature_category = new HashMap<String, Map<String,Double>>();

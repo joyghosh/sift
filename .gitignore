@@ -5,3 +5,4 @@
 *.db
 *.db-journal
 *.bk
+.settings/
